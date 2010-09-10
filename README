@@ -1,0 +1,90 @@
+sfI18NGettextPluralPlugin
+=========================
+
+The `sfI18NGettextPluralPlugin` extends sfI18N to provide extended support on Gettext PO/MO file's plural forms format.  
+
+This plugin will interpret the plural form formula, that's usually located in PO/MO file's meta data section, to remove the need to specify the formula when you use format_number_choice.  This is especially important for application that supports languages with more complex plural forms such as Russian.  This plugin also fixes an issue in current sfI18N implementation where it doesn't break down the plural forms into individual translated text.  When a translation has plural form, the singular and plural form's text would be merged.
+
+Content
+-------
+  * `sfI18NGettextPlural.class.php` class which extends sfI18N
+  * `sfMessageFormatPlural.class.php` class which extends sfMessageFormat
+  * `sfMessageSource_gettextPlural.class.php` class which extends sfMessageSource_gettext
+  * `I18NPluralHelper.php` adds a new function called __plural($text, $plural, $args, $catalogue)
+
+Installation
+------------
+
+  * Install the plugin
+
+        $ symfony plugin:install sfI18NGettextPluralPlugin
+
+  * Change i18n class in `factories.yml` from `sfI18N` to `sfI18NGettextPlural` and add/modify params `source` to `gettextPlural`
+  
+        all:
+          i18n:
+            class: sfI18NGettextPlural
+            param:
+              source: gettextPlural
+        
+  * Create PO and MO files and place it in i18n directory of your app. (e.g. /apps/frontend/i18n/<language>)  MO files are binary format of the PO and MO files will be read by this plugin.  You can convert PO to MO with the `msgfmt` tool.
+  
+  * Enable `i18n` in `settings.yml`
+
+        all:
+          .settings:
+            i18n: true
+
+  * Add I18N and I18NPlural helpers
+
+        all:
+          .settings:
+            standard_helpers: [Partial, Cache, I18N, I18NPlural]
+        
+  * Clear the cache
+
+        $ symfony cache:clear
+
+How plugin works
+----------------
+
+The plugin will first look for `Plural-Forms` in the PO/MO file's meta data section and store it as `%PLURAL-FORMS%` in the same translation associative array.  The plural forms is stored as an array under a formulated key `<singular form>|<plural form>`.  For example, Russian has 1 singular and 2 plural forms.  In the PO/MO's header section, you will need to specify the formula as follow:
+
+    "Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));"
+
+In the translation, you will have something like this:
+
+    msgid "1 student"
+    msgid_plural "@count students"
+    msgstr[0] "@count человек"
+    msgstr[1] "@count человека"
+    msgstr[2] "@count человек"
+
+After we parse the MO file, the associative array will have following (this is for illustrative purpose only, the actual array is slightly different):
+
+    '%PLURAL-FORMS' => '((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n'
+    '1 student' => '1 человек'
+    '1 student|@count students' => Array( [0] => '@count человек'
+                                          [1] => '@count человека'
+                                          [2] => '@count человек' )
+
+A new function is added for producing plural forms translation.
+
+    __plural($text, $plural, $args, $catalogue)
+
+Example:
+
+    __plural('1 student','@count students', array('@count' => '2'));
+
+You can continue to use the usual __($text, $args, $catalogue) function for singular form translation.  
+
+* Note that the first parameter is used for plural form calculation.  If you have other parameters you like to insert before the numeric value, you will have to break up the translation to ensure the numeric value always appears as the first parameter.
+
+* Also, keep in mind that there is a chance of naming collision with `%PLURAL-FORMS%` and the generated plural form key `<singular form>|<plural form>`.  Please make sure you don't use any of such form as your normal translation key.
+
+Changelog
+---------
+
+### 2010-09-09 | 1.0.0 Stable
+
+ * edng: Initial release (symfony 1.4)
