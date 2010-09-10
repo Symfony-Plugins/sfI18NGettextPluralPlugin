@@ -2,8 +2,8 @@
 <package packagerversion="1.4.6" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>sfI18NGettextPluralPlugin</name>
  <channel>plugins.symfony-project.org</channel>
- <summary>The `sfI18NGettextPluralPlugin` extends sfI18N to provide extended support on Gettext PO/MO file's plural forms format.</summary>
- <description>This plugin will interpret the plural form formula, that's usually located in PO/MO file's meta data section, to remove the need to specify the formula when you use format_number_choice.  This is especially important for application that supports languages with more complex plural forms such as Russian.  This plugin also fixes an issue in current sfI18N implementation where it doesn't break down the plural forms into individual translated text.  When a translation has plural form, the singular and plural form's text would be merged.</description>
+ <summary>The `sfI18NGettextPluralPlugin` extends sfI18N to provide extended support on Gettext's plural forms</summary>
+ <description>This plugin will interpret the plural form formula, that's usually located in PO/MO file's meta data section, removing the need to specify the same formula whenever you use format_number_choice.  This is especially important for application that supports languages with more complex plural forms such as Russian.  This plugin also fixes an issue in current sfI18N implementation where it doesn't tokenize plural forms.  Instead, singular and plural forms are merged into one string.</description>
  <lead>
   <name>Edwood Ng</name>
   <user>edng</user>
@@ -13,7 +13,7 @@
  <date>2010-09-09</date>
  <time>20:00:00</time>
  <version>
-  <release>1.0.0</release>
+  <release>1.0.1</release>
   <api>1.0.0</api>
  </version>
  <stability>
@@ -50,17 +50,24 @@
     <name>symfony</name>
     <channel>pear.symfony-project.com</channel>
     <min>1.4.0</min>
-    <max>1.4.9</max>
+    <max>1.5.0</max>
    </package>
   </required>
  </dependencies>
  <phprelease />
  <changelog>
   <release>
-   <version>1.0.0</version>
-   <state>stable</state>
+   <version>
+    <release>1.0.1</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.symfony-project.com/license">MIT license</license>
    <date>2010-09-09</date>
-   <notes>Initial release</notes>
+   <notes>* edng: 1.0.1 release for Symfony 1.4</notes>
   </release>
  </changelog>
 </package>

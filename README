@@ -1,9 +1,9 @@
 sfI18NGettextPluralPlugin
 =========================
 
-The `sfI18NGettextPluralPlugin` extends sfI18N to provide extended support on Gettext PO/MO file's plural forms format.  
+The `sfI18NGettextPluralPlugin` extends sfI18N to provide extended support on Gettext's plural forms.
 
-This plugin will interpret the plural form formula, that's usually located in PO/MO file's meta data section, to remove the need to specify the formula when you use format_number_choice.  This is especially important for application that supports languages with more complex plural forms such as Russian.  This plugin also fixes an issue in current sfI18N implementation where it doesn't break down the plural forms into individual translated text.  When a translation has plural form, the singular and plural form's text would be merged.
+This plugin will interpret the plural form formula, that's usually located in PO/MO file's meta data section, removing the need to specify the same formula whenever you use format_number_choice.  This is especially important for application that supports languages with more complex plural forms such as Russian.  This plugin also fixes an issue in current sfI18N implementation where it doesn't tokenize plural forms.  Instead, singular and plural forms are merged into one string.
 
 Content
 -------
@@ -85,6 +85,7 @@ You can continue to use the usual __($text, $args, $catalogue) function for sing
 Changelog
 ---------
 
-### 2010-09-09 | 1.0.0 Stable
+### 2010-09-09 | 1.0.1 Stable
 
- * edng: Initial release (symfony 1.4)
+ * edng: 1.0.1 release for Symfony 1.4
+
